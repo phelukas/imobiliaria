@@ -6,4 +6,4 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=20, blank=False, null=False, verbose_name='Segundo nome')
     
     def __str__(self):
-        return self.email
+        return self.username
