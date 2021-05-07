@@ -1,20 +1,36 @@
-from django.urls import reverse_lazy
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView
+import json
 
-from core.models import Imovel, Venda
-from core.forms import VendaForm
+from django.views.generic.base import View
+
+from core.models import Imovel, Venda, Cliente
+from core.forms import VendaForm, ClienteForm
+
+from django.http import HttpResponse, response
+
+
+class ListaClienteVendaView(View):
+
+    model = Cliente
+
+    def post(self, request, *args, **kwargs):
+        response = json.dumps({'mensagem':'Requisição '})
+        return HttpResponse(response, content_type='application/json')
 
 
 class AdicionarVendaView(CreateView):
 
     template_name = "base/simulacao.html"
+    queryset = Cliente.objects.all()
     
     def get(self, request, *args, **kwargs):
-        self.object = None
+        self.object = Cliente.objects.all()
+        print(self.object)
 
         venda_form = VendaForm(prefix='venda_form')
+        cliente_form = ClienteForm(prefix='cliente_form')
 
-        return self.render_to_response(self.get_context_data(form=venda_form))
+        return self.render_to_response(self.get_context_data(form=venda_form, form2=cliente_form))
 
 # class AdicionaClienteView(CreateView):
 #     template_name = "cliente/criar_cliente.html"
