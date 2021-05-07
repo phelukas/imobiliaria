@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-from django.views.generic.base import TemplateView
 from core.forms.Cliente import ClienteForm
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView

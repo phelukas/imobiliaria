@@ -1,5 +1,4 @@
 from django.db import models
-from core.models import imovel
 from users.models import User
 from core.models.cliente import Cliente
 from core.models.imovel import Imovel
