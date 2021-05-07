@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate
+from django.forms import widgets
 from django.utils.translation import ugettext_lazy as _
 
 from users.models import User
@@ -11,9 +12,10 @@ class UserLoginForm(forms.ModelForm):
         model = User
         fields = ('username', 'password')
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'username'}),
-            'password': forms.PasswordInput(attrs={'class': 'form-control line-input', 'placeholder': 'Senha'}),
+            'username': forms.TextInput(attrs={'class':'fadeIn second', 'placeholder':'username'}),
+            'password': forms.PasswordInput(attrs={'class':'fadeIn third', 'placeholder':'password'})
         }
+
 
     # Validar/autenticar campos de login
     def clean(self):
@@ -29,8 +31,5 @@ class UserLoginForm(forms.ModelForm):
         if not user or not user.is_active:
             raise forms.ValidationError(u"E-mail ou senha inválidos.")
         return user
-
-
-
 
 

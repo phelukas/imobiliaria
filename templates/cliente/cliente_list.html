@@ -1,0 +1,56 @@
+{%extends 'base/base.html'%}
+
+{%block title%}Seus Clientes{%endblock%}
+{%block content%}
+
+<div class="container">
+  {% include 'base/msg_sucesso.html' %}
+</div>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Cliente</th>
+      <th scope="col">Contatos</th>
+      <th scope="col">Telefone</th>
+      <th scope="col">Data de cadastro</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cliente in all_clientes %}
+    <tr>
+      <td>{{cliente.primeiro_nome}} {{cliente.segundo_nome}}</td>
+      <td>{{cliente.email}}</td>
+      <td>{{cliente.telefone}}</td>
+      <td>{{cliente.data_cadastro|date}}</td>
+      <td>
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+          <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              ...
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+              <li><a class="dropdown-item" href="{% url 'core:editcliente' cliente.id %}">Editar</a></li>
+              <li><a class="dropdown-item" href="{% url 'core:delcliente' cliente.id %}">Excluir</a></li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<div class="container">
+  <div class="d-flex flex-row-reverse bd-highlight">
+    <div class="header-btn">
+      <a href="{{add_url}}" class="btn btn-success"><span>Novo cliente</span></a>
+      <button class="btn btn-red btn-remove"></button>
+    </div>
+  </div>
+</div>
+{%endblock%}

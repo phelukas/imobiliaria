@@ -1,1 +1,34 @@
-<h1>oioioi</h1>
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Endereço</th>
+            <th scope="col">Numero</th>
+            <th scope="col">Bairro</th>
+            <th scope="col">Complemento</th>
+            <th scope="col">Cidade</th>
+            <th scope="col">Estado</th>
+            <th scope="col">CEP</th>
+            <th scope="col">Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for campo in all_imoveis %}
+        <tr>
+            <td>{{campo.endereco}}</td>
+            <td>{{campo.numero}}</td>
+            <td>{{campo.bairro}}</td>
+            <td>{{campo.complemento}}</td>
+            <td>{{campo.cidade}}</td>
+            <td>{{campo.estado}}</td>
+            <td>{{campo.cep}}</td>
+            <td>R$ {{campo.valor}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

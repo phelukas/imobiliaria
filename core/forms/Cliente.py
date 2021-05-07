@@ -11,23 +11,22 @@ class ClienteForm(forms.ModelForm):
 
     class Meta:
         model = Cliente
-        exclude = ('data_edicao','data_cadastro','criado_por',)
+        exclude = ('data_edicao', 'data_cadastro', 'criado_por',)
         widgets = {
-            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.TextInput(attrs={'class': 'form-control'}),
             'primeiro_nome': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
             'telefone': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
         labels = {
-            'cpf': _('CPF'),
-            'email': _('E-mail'),
             'primeiro_nome': _('Primeiro nome'),
             'segundo_nome': _('Segundo nome'),
+            'cpf': _('CPF'),
+            'email': _('E-mail'),
             'telefone': _('Telefone/wpp'),
         }
-
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -36,7 +35,8 @@ class ClienteForm(forms.ModelForm):
         if Cliente.objects.exclude(pk=self.instance.pk).filter(cpf=cpf).exists():
             self.add_error('cpf', ' Já existe um perfil vinculado a esse cpf')
         if Cliente.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
-            self.add_error('email', 'Já existe um perfil vinculado a esse email')
+            self.add_error(
+                'email', 'Já existe um perfil vinculado a esse email')
         return self.cleaned_data
 
     def save(self, commit=True):
@@ -45,4 +45,3 @@ class ClienteForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-

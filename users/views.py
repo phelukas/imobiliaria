@@ -11,6 +11,9 @@ class UserFormView(View):
 
     def get(self, request):
         form = self.form_class(None)
+
+        if request.user.is_authenticated:
+            return redirect('core:index')        
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
@@ -21,6 +24,6 @@ class UserFormView(View):
             user = form.authenticate_user(username=username, password=password)
             if user:
                 login(request, user)
-                return redirect('base:index')
+                return redirect('core:index')
 
         return render(request, self.template_name, {'form': form})

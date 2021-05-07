@@ -6,16 +6,16 @@ from django.utils import timezone
 class Cliente(models.Model):
 
     # Dados
+    primeiro_nome = models.CharField(
+        max_length=20, blank=False, null=False, verbose_name='Primeiro nome')
+    segundo_nome = models.CharField(
+        max_length=20, blank=False, null=False, verbose_name='Segundo nome')
     cpf = models.CharField(unique=True, max_length=13,
                            blank=False, null=False, verbose_name='CPF')
     email = models.EmailField(unique=True, blank=False,
                               null=False, verbose_name='E-mail')
     telefone = models.CharField(
         max_length=15, null=True, blank=True, verbose_name='Telefone')
-    primeiro_nome = models.CharField(
-        max_length=20, blank=False, null=False, verbose_name='Primeiro nome')
-    segundo_nome = models.CharField(
-        max_length=20, blank=False, null=False, verbose_name='Segundo nome')
 
     # Sobre o objeto
     data_cadastro = models.DateTimeField(editable=False)

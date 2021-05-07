@@ -1,1 +1,1 @@
-from .cliente import AdicionaClienteView, ListarClienteView, Index
+from .cliente import AdicionaClienteView, ListarClienteView, Index, EditarClienteView, DeletarClienteView

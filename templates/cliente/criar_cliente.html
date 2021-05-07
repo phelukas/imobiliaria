@@ -1,0 +1,31 @@
+{%extends 'base/base.html'%}
+{%block title%}Criar Cliente{%endblock%}
+{%block content%}
+<div class="login-box">
+    <div class="card">
+        <div class="body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="msg">Criar um novo paciente
+
+                    {% include 'base/form_erro_msg.html' %}
+
+                </div>
+                {% for field in form %}
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">{{field.label}}</i>
+                    </span>
+                    <div class="form-line">
+                        {{field}}
+                    </div>
+                </div>
+                {% endfor %}
+                <button class="btn btn-block btn-red" type="submit">REGISTRAR</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}
