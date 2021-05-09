@@ -2,58 +2,28 @@
 
 {%block title%}Seus Clientes{%endblock%}
 {%block content%}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Cliente</th>
-            <th scope="col">Contatos</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Data de cadastro</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for cliente in all_clientes %}
-        <tr>
-            <td>{{cliente.primeiro_nome}} {{cliente.segundo_nome}}</td>
-            <td>{{cliente.email}}</td>
-            <td>{{cliente.telefone}}</td>
-            <td>{{cliente.data_cadastro|date}}</td>
-            <td>
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            ...
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <li><a class="dropdown-item" href="{% url 'core:editcliente' cliente.id %}">Editar</a></li>
-                            <li><a class="dropdown-item" href="{% url 'core:delcliente' cliente.id %}">Excluir</a></li>
-                            <li><a class="dropdown-item" href="{% url 'core:delcliente' cliente.id %}">Excluir</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{%endblock%}
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<section class="container my-5">
+    <div class="list-group Content">
+        {% for cliente in all_clientes %}
+        <a href="{% url 'core:addvenda' %}" class="list-group-item list-group-item-action"
+            aria-current="true">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{cliente.primeiro_nome}} {{cliente.segundo_nome}}</h5>
+                <small>{{cliente.data_cadastro|date}}</small>
             </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
+            <p class="mb-1">CPF: {{cliente.email}} | E-mail: {{cliente.email}}</p>
+            <small>{{cliente.id}}</small>
+        </a>
+        {% endfor %}
     </div>
-</div>
+</section>
+
+<style>
+    .Content {
+        height: 224px;
+        overflow: auto;
+        background: #fff;
+    }
+</style>
+{%endblock%}

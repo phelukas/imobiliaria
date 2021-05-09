@@ -2,15 +2,17 @@ from core.forms.Cliente import ClienteForm
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView
 
-from core.models.cliente import Cliente
-from core.models import Imovel
+from core.models import Imovel, Cliente
 
 
 class Index(ListView):
 
-    model = Imovel
     template_name = "base/index.html"
     context_object_name = 'all_imoveis'
+
+    def get_queryset(self):
+        queryset = Imovel.objects.filter(vendido_status=False)
+        return queryset
 
 
 class AdicionaClienteView(CreateView):

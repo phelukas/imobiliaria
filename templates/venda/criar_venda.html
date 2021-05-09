@@ -6,7 +6,7 @@
         <div class="body">
             <form method="POST">
                 {% csrf_token %}
-                <div class="msg">Criar um novo paciente
+                <div class="msg">Criar uma nova venda
 
                     {% include 'base/form_erro_msg.html' %}
 
@@ -21,6 +21,8 @@
                     </div>
                 </div>
                 {% endfor %}
+
+            
                 <button class="btn btn-block btn-red" type="submit">REGISTRAR</button>
             </form>
         </div>

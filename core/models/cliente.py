@@ -16,6 +16,7 @@ class Cliente(models.Model):
                               null=False, verbose_name='E-mail')
     telefone = models.CharField(
         max_length=15, null=True, blank=True, verbose_name='Telefone')
+    quantidade_compras = models.IntegerField(default=0)        
 
     # Sobre o objeto
     data_cadastro = models.DateTimeField(editable=False)

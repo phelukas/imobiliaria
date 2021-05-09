@@ -1,0 +1,148 @@
+{%extends 'base/base.html'%}
+{%block title%}Checkout{%endblock%}
+{%block content%}
+<div class="container">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+            alt="" width="72" height="72">
+        <h2>Checkout form</h2>
+        <p class="lead">Below is an example form built entirely with Bootstrap's form controls. Each required form
+            group has a validation state that can be triggered by attempting to submit the form without completing
+            it.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Pagamento</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            {% if all_vendas.pagamento == 'parcelado' %}
+                            <h6 class="my-0">Parcelado</h6>
+                            {% else %}
+                            <h6 class="my-0">À vista</h6>
+                            {% endif %}
+                            <small class="text-muted">Sem juros</small>
+                        </div>
+                        {% if all_vendas.pagamento == 'avista' %}
+                        <span class="text-muted"><b>1X </b> {{all_vendas.imovel_imovel.valor}}</span>
+                        {% else %}
+                        <span class="text-muted"><b>180X </b> {{valor_dividido}}</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total</span>
+                        <strong>R${{all_vendas.imovel_imovel.valor}}</strong>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Informações do cliente</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="firstName">Primeiro nome</label>
+                        <input type="text" class="form-control" value="{{all_vendas.cliente_cliente.primeiro_nome}}"
+                            required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Segundo nome</label>
+                        <input type="text" class="form-control" value="{{all_vendas.cliente_cliente.segundo_nome}}"
+                            required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" value="{{all_vendas.cliente_cliente.email}}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="email">Telefone</label>
+                        <input type="text" class="form-control" value="{{all_vendas.cliente_cliente.telefone}}">
+                    </div>
+                </div>
+                <h4 class="mb-3">Informações do Imovel</h4>
+                <div class="row">
+                    <div class="col-md-auto">
+                        <label>Endereço</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.endereco}}" required>
+                    </div>
+                    <div class="col">
+                        <label>CEP</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.cep}}" required>
+                    </div>
+                    <div class="col col-lg-2">
+                        <label>Numero</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.numero}}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-auto">
+                        <label>Complemento</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.complemento}}"
+                            required>
+                    </div>
+                    <div class="col">
+                        <label>Bairo</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.bairro}}" required>
+                    </div>
+                    <div class="col col-lg-2">
+                        <label>Cidade</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.cidade}}" required>
+                    </div>
+                    <div class="col col-lg-2">
+                        <label>Estado</label>
+                        <input type="text" class="form-control" value="{{all_vendas.imovel_imovel.estado}}" required>
+                    </div>
+                </div>
+
+                <h4 class="mb-3">Informações do vendedor</h4>
+
+                <div class="row">
+                    <div class="col-md-auto">
+                        <label>Nome</label>
+                        <input type="text" class="form-control"
+                            value="{{all_vendas.vendedor_user.first_name}} {{all_vendas.vendedor_user.last_name}}"
+                            required>
+                    </div>
+                    <div class="col">
+                        <label>E-mail</label>
+                        <input type="text" class="form-control" value="{{all_vendas.vendedor_user.email}}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-auto">
+                        <label>Comissão</label>
+                        <input type="text" class="form-control" value="R${{comissao}}" required>
+                    </div>
+                    <div class="col-md-auto">
+                        <label>Funcionario desde</label>
+                        <input type="text" class="form-control" value="{{all_vendas.vendedor_user.date_joined|date}}"
+                            required>
+                    </div>
+                </div>
+
+                {% if all_vendas.venda_status == False %}
+                <div class="my-1 pt-5 text-muted text-center text-small">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <a href="{% url 'core:delvenda' all_vendas.id %}">
+                            <button type="button" class="btn btn-danger">Cancelar venda</button>
+                        </a>
+                        <a href="{% url 'core:listavenda' %}">
+                            <button type="button" class="btn btn-warning">Salvar venda</button>
+                        </a>
+                        <button type="submit" class="btn btn-success">Finalizar venda</button>
+                    </div>
+                </div>
+                {% endif %}
+                <footer class="my-5 pt-5 text-muted text-center text-small">
+                </footer>
+            </div>
+        </div>
+    </form>
+</div>
+{%endblock%}

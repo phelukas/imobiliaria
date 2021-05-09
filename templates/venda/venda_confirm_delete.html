@@ -1,12 +1,13 @@
 {% extends 'base/base.html' %}
-{%block title%}Deletar Cliente{%endblock%}
 {% block content %}
+{% if object.venda_status == False %}
 <form method="post">
     {% csrf_token %}
-    <p>Tem certeza que deseja deletar o cliente "{{ object }}"?</p>
+    <p>Fazendo isso você apaga do historico essa venda {{object.venda_status }}</p>
     <button type="submit" class="btn btn-danger">Confirmar</button>
     <button type="button" class="btn btn-warning">
-        <a href="{% url 'core:listacliente' %}">Cancelar</a>
+        <a href="{% url 'core:listavenda' %}">Cancelar</a>
     </button>
 </form>
+{% endif %}
 {% endblock %}

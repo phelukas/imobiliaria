@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import tree
+from core.models import Cliente
 
 
 class Imovel(models.Model):
@@ -18,6 +20,9 @@ class Imovel(models.Model):
         max_length=50, blank=False, null=False, verbose_name='Estado')
     cep = models.CharField(max_length=10, blank=False,
                            null=False, verbose_name='CEP')
+    vendido_status = models.BooleanField(default=False)
+    propretario = models.ForeignKey(
+        Cliente, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Valor
     valor = models.DecimalField(max_digits=7, decimal_places=2)
