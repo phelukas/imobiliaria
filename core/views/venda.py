@@ -1,12 +1,16 @@
+from django.contrib import messages
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView
 from decimal import Decimal
 from django.shortcuts import redirect
-
 from django.urls import reverse_lazy
 from django.urls import reverse
 
-from core.models import Venda
+from core.models import Venda, Cliente
 from core.forms import VendaForm
+
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
 
 
 class ListaClienteVendaView(ListView):
@@ -14,26 +18,55 @@ class ListaClienteVendaView(ListView):
     template_name = "venda/lista_venda.html"
     context_object_name = 'vendas'
 
+    def get_queryset(self):
+        queryset = Venda.objects.filter(vendedor_user=self.request.user)
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        vendas_finalizadas = request.GET.get('vendas_finalizadas')
+        vendas_aguardando = request.GET.get('vendas_aguardando')
+        clientes = request.GET.get('clientes')
+
+        if is_valid_queryparam(vendas_finalizadas):
+            self.object_list = self.object_list.filter(venda_status=True)
+
+        if is_valid_queryparam(vendas_aguardando):
+            self.object_list = self.object_list.filter(venda_status=False)            
+
+        if is_valid_queryparam(clientes) and clientes != 'Todos':
+            self.object_list = self.object_list.filter(
+                cliente_cliente__email=clientes)
+
+        return self.render_to_response(self.get_context_data())
+
     def get_context_data(self, **kwargs):
         context = super(ListaClienteVendaView, self).get_context_data(**kwargs)
         context['add_url'] = reverse_lazy('core:addvenda')
+        context['todos_clientes'] = Cliente.objects.filter(
+            criado_por=self.request.user)
         return context
-
-    def get_queryset(self, **kwrgs):
-        queryset = Venda.objects.filter(vendedor_user=self.request.user)
-        return queryset
 
 
 class AdicionarVendaView(CreateView):
 
     template_name = "venda/criar_venda.html"
     model = Venda
+    success_message = "Venda cadastrada, porém, não finalizada para o cliente <b>%(descricao)s </b>."
 
     def get_success_url(self):
         success_url = reverse('core:checkout', kwargs={
             'pk': self.object.pk,
         })
         return success_url
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(cleaned_data, descricao=str(self.object.cliente_cliente))
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, self.get_success_message(form.cleaned_data))
+        return redirect(self.get_success_url())
 
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -60,6 +93,16 @@ class CheckoutView(UpdateView):
 
     template_name = 'venda/checkout_venda.html'
     context_object_name = 'all_vendas'
+    success_url = reverse_lazy('core:listavenda')
+    success_message = "Venda para o cliente <b>%(descricao)s </b> <b>finalizada</b> com sucesso."
+
+    def get_success_message(self):
+        return self.success_message % dict(descricao=str(self.object.cliente_cliente.email))
+
+    def form_valid(self):
+        messages.success(
+            self.request, self.get_success_message())
+        return redirect(self.success_url)
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)
@@ -87,8 +130,6 @@ class CheckoutView(UpdateView):
 
         obj = self.object
 
-        print(obj.cliente_cliente.quantidade_compras)
-
         if obj.venda_status == False:
 
             obj.venda_status = True
@@ -104,7 +145,7 @@ class CheckoutView(UpdateView):
             obj.vendedor_user.quantidade_vendas = obj.vendedor_user.quantidade_vendas + 1
             obj.vendedor_user.save()
 
-        return redirect('core:listavenda')
+        return self.form_valid()
 
 
 class DeletarVendaView(DeleteView):

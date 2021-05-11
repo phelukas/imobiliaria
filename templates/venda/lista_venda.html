@@ -1,6 +1,6 @@
 {%extends 'base/base.html'%}
 
-{%block title%}Suas vendas{%endblock%}
+{%block title%}Suas vendas{% endblock %}
 {%block content%}
 
 <div class="container">
@@ -17,37 +17,69 @@
 
 
 <section class="container">
+  <form class="form-inline" method="GET">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <input type="checkbox" id="allvendas" name="allvendas">
+          <label for="allvendas">
+            Todas vendas
+          </label>
+        </div>
+        <div class="col">
+          <input type="checkbox" id="vendas_finalizadas" name="vendas_finalizadas">
+          <label for="vendas_finalizadas">
+            Vendas Concluída
+          </label>
+        </div>
+        <div class="col">
+          <input type="checkbox" id="vendas_aguardando" name="vendas_aguardando">
+          <label for="vendas_aguardando">
+            Vendas Não Concluída
+          </label>
+        </div>
+        <div class="col">
+          <label for="clientes">Clientes</label>
+          <select id="clientes" name="clientes">
+            <option selected>Todos</option>
+            {% for cliente in todos_clientes %}
+            <option value="{{ cliente }}">{{ cliente }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
   <table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">Cliente</th>
         <th scope="col">Contatos</th>
         <th scope="col">Telefone</th>
-        <th scope="col">Data de cadastro</th>
-        <th scope="col">
-          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <div class="btn-group" role="group">
-              <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                filtros
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href=" ">Todas vendas</a></li>
-                <li><a class="dropdown-item" href="">Vendas finalizadas</a></li>
-              </ul>
-            </div>
-          </div>
-        </th>
+        <th scope="col">Status da venda</th>
+        <th scope="col">Imovel</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       {% for venda in vendas %}
-      <h1>{{x}}</h1>
       <tr>
         <td>{{venda.cliente_cliente.primeiro_nome}} {{venda.cliente_cliente.segundo_nome}}</td>
         <td>{{venda.cliente_cliente.email}}</td>
         <td>{{venda.cliente_cliente.telefone}}</td>
-        <td>{{venda.cliente_cliente.data_cadastro|date}}</td>
+        <td>
+          {% if venda.venda_status %}
+          Concluída
+          {% else %}
+          Aguardando
+          {% endif %}
+        </td>
+        <td>{{ venda.imovel_imovel }}</td>
         <td>
           <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <div class="btn-group" role="group">
@@ -56,7 +88,8 @@
                 ...
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href="{% url 'core:checkout' venda.id %}">{% if venda.venda_status == True %}Visualizar{% else %} Editar {% endif %}</a></li>
+                <li><a class="dropdown-item" href="{% url 'core:checkout' venda.id %}">
+                    {% if venda.venda_status == True %}Visualizar{% else %} Editar {% endif %}</a></li>
               </ul>
             </div>
           </div>

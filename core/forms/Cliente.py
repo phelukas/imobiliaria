@@ -18,6 +18,7 @@ class ClienteForm(forms.ModelForm):
             'cpf': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control'}),
             'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'foto': forms.FileInput(),
         }
 
         labels = {
@@ -26,6 +27,7 @@ class ClienteForm(forms.ModelForm):
             'cpf': _('CPF'),
             'email': _('E-mail'),
             'telefone': _('Telefone/wpp'),
+            'foto': _('Foto'),
         }
 
     def clean(self):
