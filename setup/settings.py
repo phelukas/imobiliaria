@@ -58,7 +58,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'imobiliaria',
         'USER': 'postgres',
-        'PASSWORD': 'tsmx2020',
+        'PASSWORD': 'SENHA',
         'HOST': 'localhost'
     }
 }
