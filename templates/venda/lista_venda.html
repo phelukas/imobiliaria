@@ -41,13 +41,13 @@
       </tr>
     </thead>
     <tbody>
-      {% for cliente in all_clientes %}
+      {% for venda in vendas %}
       <h1>{{x}}</h1>
       <tr>
-        <td>{{cliente.cliente_cliente.primeiro_nome}} {{cliente.cliente_cliente.segundo_nome}}</td>
-        <td>{{cliente.cliente_cliente.email}}</td>
-        <td>{{cliente.cliente_cliente.telefone}}</td>
-        <td>{{cliente.cliente_cliente.data_cadastro|date}}</td>
+        <td>{{venda.cliente_cliente.primeiro_nome}} {{venda.cliente_cliente.segundo_nome}}</td>
+        <td>{{venda.cliente_cliente.email}}</td>
+        <td>{{venda.cliente_cliente.telefone}}</td>
+        <td>{{venda.cliente_cliente.data_cadastro|date}}</td>
         <td>
           <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <div class="btn-group" role="group">
@@ -56,7 +56,7 @@
                 ...
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href="{% url 'core:checkout' cliente.id %}">Editar</a></li>
+                <li><a class="dropdown-item" href="{% url 'core:checkout' venda.id %}">{% if venda.venda_status == True %}Visualizar{% else %} Editar {% endif %}</a></li>
               </ul>
             </div>
           </div>

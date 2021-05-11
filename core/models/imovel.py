@@ -20,7 +20,9 @@ class Imovel(models.Model):
         max_length=50, blank=False, null=False, verbose_name='Estado')
     cep = models.CharField(max_length=10, blank=False,
                            null=False, verbose_name='CEP')
+
     vendido_status = models.BooleanField(default=False)
+
     propretario = models.ForeignKey(
         Cliente, on_delete=models.SET_NULL, null=True, blank=True)
 

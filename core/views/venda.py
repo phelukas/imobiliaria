@@ -1,4 +1,3 @@
-from users.models import User
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView
 from decimal import Decimal
 from django.shortcuts import redirect
@@ -6,26 +5,21 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.urls import reverse
 
-from core.models import Imovel, Venda, Cliente, venda
-from core.forms import VendaForm, ClienteForm
-
-from django.http import HttpResponse, response
+from core.models import Venda
+from core.forms import VendaForm
 
 
 class ListaClienteVendaView(ListView):
 
     template_name = "venda/lista_venda.html"
-    context_object_name = 'all_clientes'
+    context_object_name = 'vendas'
 
     def get_context_data(self, **kwargs):
         context = super(ListaClienteVendaView, self).get_context_data(**kwargs)
         context['add_url'] = reverse_lazy('core:addvenda')
-        context['x'] = Venda.objects.filter(vendedor_user=self.request.user).filter(venda_status=True)
-        context['y'] = self.get_queryset().filter(venda_status=True)
-        return context        
+        return context
 
     def get_queryset(self, **kwrgs):
-        f = self.request.GET.get()
         queryset = Venda.objects.filter(vendedor_user=self.request.user)
         return queryset
 
@@ -118,32 +112,3 @@ class DeletarVendaView(DeleteView):
     template_name = 'venda/venda_confirm_delete.html'
     model = Venda
     success_url = reverse_lazy('core:listavenda')
-
-# class EditarClienteView(UpdateView):
-
-#     template_name = 'cliente/cliente_edit.html'
-#     success_url = reverse_lazy('core:listacliente')
-#     context_object_name = 'cliente'
-
-#     def get_object(self, queryset=None):
-#         pk = self.kwargs.get(self.pk_url_kwarg)
-#         obj = Cliente.objects.get(pk=pk)
-#         return obj
-
-#     def get(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         venda_form = VendaForm(instance=self.object, prefix='venda_form')
-
-#         return self.render_to_response(self.get_context_data(form=venda_form))
-
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         venda_form = VendaForm(
-#             request.POST, request.FILES, instance=self.object, prefix='venda_form', request=request)
-
-#         if venda_form.is_valid():
-#             self.object = venda_form.save(commit=False)
-#             self.object.save()
-
-#             return self.form_valid(venda_form)
-#         return self.form_invalid(form=venda_form)

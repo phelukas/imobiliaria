@@ -16,7 +16,8 @@ class Cliente(models.Model):
                               null=False, verbose_name='E-mail')
     telefone = models.CharField(
         max_length=15, null=True, blank=True, verbose_name='Telefone')
-    quantidade_compras = models.IntegerField(default=0)        
+    quantidade_compras = models.IntegerField(default=0)
+    foto = models.ImageField(upload_to='imagens/%Y/%m/%d/', blank=True, null=True)
 
     # Sobre o objeto
     data_cadastro = models.DateTimeField(editable=False)

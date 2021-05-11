@@ -11,7 +11,7 @@ class ClienteForm(forms.ModelForm):
 
     class Meta:
         model = Cliente
-        exclude = ('data_edicao', 'data_cadastro', 'criado_por',)
+        exclude = ('data_edicao', 'data_cadastro', 'criado_por','quantidade_compras',)
         widgets = {
             'primeiro_nome': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_nome': forms.TextInput(attrs={'class': 'form-control'}),

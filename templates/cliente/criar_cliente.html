@@ -1,31 +1,91 @@
 {%extends 'base/base.html'%}
 {%block title%}Criar Cliente{%endblock%}
 {%block content%}
-<div class="login-box">
-    <div class="card">
-        <div class="body">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="msg">Criar um novo paciente
 
-                    {% include 'base/form_erro_msg.html' %}
+{% include 'base/form_erro_msg.html' %}
 
-                </div>
-                {% for field in form %}
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">{{field.label}}</i>
-                    </span>
-                    <div class="form-line">
+<div class="row">
+    <div class="form-holder">
+        <div class="form-content">
+            <div class="form-items">
+                <h3>Novo cliente</h3>
+                <p>Aqu você cadastra um novo cliente.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="col-md-12">
+                        {{field.label}}
                         {{field}}
                     </div>
-                </div>
-                {% endfor %}
-                <button class="btn btn-block btn-red" type="submit">REGISTRAR</button>
-            </form>
+
+                    {% endfor %}
+
+                    <div class="form-button mt-3">
+                        <button id="submit" type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+
+<style>
+    .form-holder {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .form-content .form-items {
+        padding: 40px;
+        display: inline-block;
+        width: 100%;
+        min-width: 540px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        text-align: left;
+        -webkit-transition: all 0.4s ease;
+        transition: all 0.4s ease;
+    }
+
+    .form-content h3 {
+        text-align: left;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .form-content h3.form-title {
+        margin-bottom: 30px;
+    }
+
+    .form-content p {
+        text-align: left;
+        font-size: 17px;
+        font-weight: 300;
+        line-height: 20px;
+        margin-bottom: 30px;
+    }
+
+
+    .form-content select {
+        width: 100%;
+        padding: 9px 20px;
+        text-align: left;
+        border: 0;
+        outline: 0;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 300;
+        -webkit-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+        margin-top: 16px;
+    }
+</style>
 
 
 {%endblock%}
