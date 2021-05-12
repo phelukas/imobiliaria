@@ -1,10 +1,15 @@
-from core.forms.Cliente import ClienteForm
-from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.urls.base import reverse_lazy
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView
+from django.contrib import messages
 
+from core.models.venda import Venda
+from core.forms.Cliente import ClienteForm
 from core.models import Imovel, Cliente
 
 
+# Classe responsável por renderizar a tela de home
+# mostrando somente os imaveis qua estão disponiveis
 class Index(ListView):
 
     template_name = "base/index.html"
@@ -16,12 +21,18 @@ class Index(ListView):
 
 
 class AdicionaClienteView(CreateView):
+
     template_name = "cliente/criar_cliente.html"
     success_url = reverse_lazy('core:listacliente')
-    success_message = "Cliente <b>%(email)s </b>adicionado com sucesso."
+    success_message = "Cliente <b>%(descricao)s </b> adicionado com sucesso."
 
     def get_success_message(self, cleaned_data):
-        return self.success_message % dict(cleaned_data, username=cleaned_data['email'])
+        return self.success_message % dict(cleaned_data, descricao=str(self.object))
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, self.get_success_message(form.cleaned_data))
+        return redirect(self.get_success_url())
 
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -48,7 +59,6 @@ class AdicionaClienteView(CreateView):
 class ListarClienteView(ListView):
 
     template_name = 'cliente/cliente_list.html'
-    # success_url = reverse_lazy('cliente:listpaciente')
     context_object_name = 'all_clientes'
 
     def get_queryset(self):
@@ -66,6 +76,15 @@ class EditarClienteView(UpdateView):
     template_name = 'cliente/cliente_edit.html'
     success_url = reverse_lazy('core:listacliente')
     context_object_name = 'cliente'
+    success_message = "Dados do cliente <b>%(descricao)s </b> editados com sucesso."
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(cleaned_data, descricao=str(self.object))
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, self.get_success_message(form.cleaned_data))
+        return redirect(self.get_success_url())
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)
@@ -96,3 +115,18 @@ class DeletarClienteView(DeleteView):
     template_name = 'cliente/cliente_confirm_delete.html'
     model = Cliente
     success_url = reverse_lazy('core:listacliente')
+
+    def get_queryset(self):
+        x = self.kwargs.get(self.pk_url_kwarg)
+        queryset = Cliente.objects.all()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        teste = Venda.objects.filter(cliente_cliente=self.object)
+
+        if teste:
+            return redirect('core:listacliente')
+
+        return self.render_to_response(context)

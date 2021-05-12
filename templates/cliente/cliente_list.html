@@ -5,6 +5,7 @@
 
 <div class="container">
   {% include 'base/msg_sucesso.html' %}
+  {% include 'base/form_error_alert.html' %}
 </div>
 
 <section class="container">
@@ -26,10 +27,10 @@
     <tbody>
       {% for cliente in all_clientes %}
       <tr>
-        <td>{{cliente.primeiro_nome}} {{cliente.segundo_nome}}</td>
-        <td>{{cliente.email}}</td>
-        <td>{{cliente.telefone}}</td>
-        <td>{{cliente.data_cadastro|date}}</td>
+        <td>{{cliente.cliente_cliente.primeiro_nome}} {{cliente.cliente_cliente.segundo_nome}}</td>
+        <td>{{cliente.cliente_cliente.email}}</td>
+        <td>{{cliente.cliente_cliente.telefone}}</td>
+        <td>{{cliente.cliente_cliente.data_cadastro|date}}</td>
         <td>
           <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <div class="btn-group" role="group">
@@ -38,8 +39,8 @@
                 ...
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href="{% url 'core:editcliente' cliente.id %}">Editar</a></li>
-                <li><a class="dropdown-item" href="{% url 'core:delcliente' cliente.id %}">Excluir</a></li>
+                <li><a class="dropdown-item" href="{% url 'core:editcliente' cliente.cliente_cliente.id %}">Editar</a></li>
+                <li><a class="dropdown-item" href="{% url 'core:delcliente' cliente.cliente_cliente.id %}">Excluir</a></li>
               </ul>
             </div>
           </div>
@@ -48,8 +49,5 @@
       {% endfor %}
     </tbody>
   </table>
-
-
-
 </section>
 {%endblock%}

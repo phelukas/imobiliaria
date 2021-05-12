@@ -1,18 +1,19 @@
-from django.contrib import messages
 from django.views.generic import DeleteView, CreateView, ListView, UpdateView
-from decimal import Decimal
+from django.contrib import messages
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.urls import reverse
+from django.urls import reverse_lazy, reverse
+from decimal import Decimal
 
 from core.models import Venda, Cliente
 from core.forms import VendaForm
 
 
+# Função para verificar parametro para filtro
 def is_valid_queryparam(param):
     return param != '' and param is not None
 
 
+# Classe responsável por listar todas as vendas
 class ListaClienteVendaView(ListView):
 
     template_name = "venda/lista_venda.html"
@@ -24,16 +25,20 @@ class ListaClienteVendaView(ListView):
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
+
         vendas_finalizadas = request.GET.get('vendas_finalizadas')
         vendas_aguardando = request.GET.get('vendas_aguardando')
         clientes = request.GET.get('clientes')
 
+        # Filtar todas vendas finalizadas
         if is_valid_queryparam(vendas_finalizadas):
             self.object_list = self.object_list.filter(venda_status=True)
 
+        # Filtar todas vendas não finalizadas
         if is_valid_queryparam(vendas_aguardando):
-            self.object_list = self.object_list.filter(venda_status=False)            
+            self.object_list = self.object_list.filter(venda_status=False)
 
+        # Filtar vendas de um específico
         if is_valid_queryparam(clientes) and clientes != 'Todos':
             self.object_list = self.object_list.filter(
                 cliente_cliente__email=clientes)
@@ -48,12 +53,14 @@ class ListaClienteVendaView(ListView):
         return context
 
 
+# Classe responsável por adicionar uma venda no sistema
 class AdicionarVendaView(CreateView):
 
     template_name = "venda/criar_venda.html"
     model = Venda
     success_message = "Venda cadastrada, porém, não finalizada para o cliente <b>%(descricao)s </b>."
 
+    # Função responsável por pegar o id da venda criada e encaminha para o CheckoutView
     def get_success_url(self):
         success_url = reverse('core:checkout', kwargs={
             'pk': self.object.pk,
@@ -89,6 +96,7 @@ class AdicionarVendaView(CreateView):
         return self.form_invalid(form=venda_form)
 
 
+# Classe responsável para conferir e salvar, finalizar ou cancelar a venda
 class CheckoutView(UpdateView):
 
     template_name = 'venda/checkout_venda.html'
